@@ -4,6 +4,8 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +23,7 @@ import java.util.Collection;
 @Component
 public class JwtProvider {
 
+    private final Logger logger = LoggerFactory.getLogger(JwtProvider.class);
     private final Key key;
 
     public JwtProvider(@Value("${jwt.secret}") String secretKey) {
@@ -40,7 +43,7 @@ public class JwtProvider {
                 .toList();
 
         UserDetails principal = new User(claims.getSubject(), "", authorities);
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
 
     public boolean validateToken(String token) {
@@ -51,13 +54,13 @@ public class JwtProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
+            logger.info("잘못된 JWT 서명입니다.", e);
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
+            logger.info("만료된 JWT 토큰입니다.", e);
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
+            logger.info("지원되지 않는 JWT 토큰입니다.", e);
         } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
+            logger.info("JWT 토큰이 잘못되었습니다.", e);
         }
         return false;
     }
