@@ -1,5 +1,6 @@
 package com.infinite.api.member.domain;
 
+import com.infinite.api.member.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
 
     @Column(nullable = false, length = 100, unique = true)
     private String email;
@@ -26,5 +27,9 @@ public class Member {
 
     @Column(nullable = false, length = 100, unique = true)
     private String nickname;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE", nullable = false)
+    private RoleType role;
 
 }
