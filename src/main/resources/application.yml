@@ -1,2 +1,13 @@
-jwt:
-  secret: 'EL3irwZm0Btr43JHEOpuYxOIU5KQPnbe9hQaGHA1iRj6P8nkCE'
+spring:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
+        use_sql_comments: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql: TRACE

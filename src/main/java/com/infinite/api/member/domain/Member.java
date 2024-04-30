@@ -1,35 +1,29 @@
 package com.infinite.api.member.domain;
 
-import com.infinite.api.member.RoleType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.PRIVATE;
-import static lombok.AccessLevel.PROTECTED;
-
 @Entity
 @Getter
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor(access = PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
+    private Long id;
 
-    @Column(nullable = false, length = 100, unique = true)
+    @Column(unique = true, nullable = false, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 300)
     private String password;
 
-    @Column(nullable = false, length = 100, unique = true)
-    private String nickname;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE", nullable = false)
-    private RoleType role;
-
+    @Builder
+    public Member(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 }
