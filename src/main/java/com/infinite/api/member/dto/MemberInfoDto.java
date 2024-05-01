@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class MemberInfoDto {
 
-    private String email;
-    private String password;
+    private final String email;
+    private final String password;
 
     public Member getMemberEntity() {
         return Member.builder()
