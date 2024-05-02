@@ -82,4 +82,21 @@ class MemberServiceTest {
 
         Assertions.assertEquals(10, members.size());
     }
+
+    @Test
+    @DisplayName("로그인")
+    void signIn() {
+        MemberInfoDto memberInfoDto = MemberInfoDto.builder()
+                .email("neverdie4757@gmail.com")
+                .password("1234")
+                .build();
+
+        Member member = memberInfoDto.getMemberEntity();
+
+        memberRepository.save(member);
+
+        Long memberId = memberService.signIn(memberInfoDto);
+
+        Assertions.assertEquals(1L, memberId);
+    }
 }

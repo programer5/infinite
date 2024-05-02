@@ -9,4 +9,5 @@ public interface MemberService {
     Long signUp(MemberInfoDto memberInfo);
     Member getMember(Long id);
     List<Member> getMembers();
+    Long signIn(MemberInfoDto memberInfo);
 }
