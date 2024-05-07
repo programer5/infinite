@@ -1,6 +1,7 @@
 package com.infinite.api.member.service.impl;
 
 import com.infinite.api.exception.memberException.MemberNotFound;
+import com.infinite.api.exception.memberException.MemberPasswordDifferent;
 import com.infinite.api.member.domain.Member;
 import com.infinite.api.member.dto.MemberInfoDto;
 import com.infinite.api.member.repository.MemberRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.infinite.api.exception.memberException.memberEnum.MemberEnum.MEMBER_NOT_FOUND;
+import static com.infinite.api.exception.memberException.memberEnum.MemberEnum.MEMBER_PASSWORD_DIFFERENT;
 
 @Slf4j
 @Service
@@ -50,11 +52,11 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new MemberNotFound(MEMBER_NOT_FOUND));
 
         if (member.getPassword().equals(memberInfo.getPassword())) {
-            log.info("정상적으로 로그인이 되었습니다.", member.getId());
+            log.info("정상적으로 로그인이 되었습니다. ={}", member.getId());
             return member.getId();
         } else {
-            log.info("비밀번호가 일치하지 않습니다..", member.getPassword());
-            throw new MemberNotFound(MEMBER_NOT_FOUND);
+            log.info("비밀번호가 일치하지 않습니다. ={}", member.getPassword());
+            throw new MemberPasswordDifferent(MEMBER_PASSWORD_DIFFERENT);
         }
     }
 }

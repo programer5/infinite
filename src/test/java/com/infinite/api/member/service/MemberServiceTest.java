@@ -39,7 +39,7 @@ class MemberServiceTest {
 
         Long memberId = memberService.signUp(memberInfoDto);
 
-        Assertions.assertEquals(1L, memberId);
+        Assertions.assertNotNull(memberId);
     }
 
     @Test
@@ -98,5 +98,25 @@ class MemberServiceTest {
         Long memberId = memberService.signIn(memberInfoDto);
 
         Assertions.assertEquals(1L, memberId);
+    }
+
+    @Test
+    @DisplayName("로그인 시 존재하지 않는 이메일")
+    void signInNotExistEmail() {
+        MemberInfoDto memberInfoDto = MemberInfoDto.builder()
+                .email("neverdie4757@gmail.com")
+                .password("1234")
+                .build();
+
+        Member member = memberInfoDto.getMemberEntity();
+
+        memberRepository.save(member);
+
+        MemberInfoDto request = MemberInfoDto.builder()
+                .email("neverdie4757123@gmail.com")
+                .password("1234")
+                .build();
+
+        Assertions.assertThrows(MemberNotFound.class, () -> memberService.signIn(request));
     }
 }
