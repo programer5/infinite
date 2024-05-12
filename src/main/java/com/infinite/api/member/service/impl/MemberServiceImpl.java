@@ -1,5 +1,6 @@
 package com.infinite.api.member.service.impl;
 
+import com.infinite.api.exception.memberException.AlreadyExistsMemberException;
 import com.infinite.api.exception.memberException.MemberNotFound;
 import com.infinite.api.exception.memberException.MemberPasswordDifferent;
 import com.infinite.api.member.domain.Member;
@@ -8,13 +9,14 @@ import com.infinite.api.member.repository.MemberRepository;
 import com.infinite.api.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
-import static com.infinite.api.exception.memberException.memberEnum.MemberEnum.MEMBER_NOT_FOUND;
-import static com.infinite.api.exception.memberException.memberEnum.MemberEnum.MEMBER_PASSWORD_DIFFERENT;
+import static com.infinite.api.exception.memberException.memberEnum.MemberEnum.*;
 
 @Slf4j
 @Service
@@ -23,12 +25,24 @@ import static com.infinite.api.exception.memberException.memberEnum.MemberEnum.M
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
     public Long signUp(MemberInfoDto memberInfo) {
 
-        Member member = memberInfo.getMemberEntity();
+        Optional<Member> existingMember = memberRepository.findMemberByEmail(memberInfo.getEmail());
+
+        if (existingMember.isPresent()) {
+            throw new AlreadyExistsMemberException(ALREADY_EXISTS_MEMBER);
+        }
+
+        String encodedPassword = passwordEncoder.encode(memberInfo.getPassword());
+
+        Member member = Member.builder()
+                .email(memberInfo.getEmail())
+                .password(encodedPassword)
+                .build();
 
         Member saveMember = memberRepository.save(member);
 

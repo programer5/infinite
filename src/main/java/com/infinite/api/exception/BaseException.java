@@ -9,5 +9,5 @@ public abstract class BaseException extends RuntimeException {
         super(message);
     }
 
-    public abstract int getStatusCode();
+    public abstract String getStatusCode();
 }

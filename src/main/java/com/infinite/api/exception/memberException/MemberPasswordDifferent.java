@@ -10,7 +10,7 @@ public class MemberPasswordDifferent extends BaseException {
     }
 
     @Override
-    public int getStatusCode() {
+    public String getStatusCode() {
         return MemberEnum.MEMBER_NOT_FOUND.getCode();
     }
 }

@@ -3,14 +3,14 @@ package com.infinite.api.exception.memberException;
 import com.infinite.api.exception.BaseException;
 import com.infinite.api.exception.memberException.memberEnum.MemberEnum;
 
-public class MemberNotFound extends BaseException {
+public class AlreadyExistsMemberException extends BaseException {
 
-    public MemberNotFound(MemberEnum memberEnum) {
+    public AlreadyExistsMemberException(MemberEnum memberEnum) {
         super(memberEnum.getMessage());
     }
 
     @Override
     public String getStatusCode() {
-        return MemberEnum.MEMBER_NOT_FOUND.getCode();
+        return MemberEnum.ALREADY_EXISTS_MEMBER.getCode();
     }
 }

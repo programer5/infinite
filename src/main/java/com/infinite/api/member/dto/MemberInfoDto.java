@@ -10,13 +10,6 @@ public class MemberInfoDto {
     private final String email;
     private final String password;
 
-    public Member getMemberEntity() {
-        return Member.builder()
-                .email(email)
-                .password(password)
-                .build();
-    }
-
     @Builder
     public MemberInfoDto(String email, String password) {
         this.email = email;
