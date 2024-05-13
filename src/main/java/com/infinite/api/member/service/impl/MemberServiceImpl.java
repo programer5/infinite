@@ -25,29 +25,6 @@ import static com.infinite.api.exception.memberException.memberEnum.MemberEnum.*
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    @Override
-    @Transactional
-    public Long signUp(MemberInfoDto memberInfo) {
-
-        Optional<Member> existingMember = memberRepository.findMemberByEmail(memberInfo.getEmail());
-
-        if (existingMember.isPresent()) {
-            throw new AlreadyExistsMemberException(ALREADY_EXISTS_MEMBER);
-        }
-
-        String encodedPassword = passwordEncoder.encode(memberInfo.getPassword());
-
-        Member member = Member.builder()
-                .email(memberInfo.getEmail())
-                .password(encodedPassword)
-                .build();
-
-        Member saveMember = memberRepository.save(member);
-
-        return saveMember.getId();
-    }
 
     @Override
     public Member getMember(Long id) {
@@ -58,19 +35,5 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<Member> getMembers() {
         return memberRepository.findAll();
-    }
-
-    @Override
-    public Long signIn(MemberInfoDto memberInfo) {
-        Member member = memberRepository.findMemberByEmail(memberInfo.getEmail())
-                .orElseThrow(() -> new MemberNotFound(MEMBER_NOT_FOUND));
-
-        if (member.getPassword().equals(memberInfo.getPassword())) {
-            log.info("정상적으로 로그인이 되었습니다. ={}", member.getId());
-            return member.getId();
-        } else {
-            log.info("비밀번호가 일치하지 않습니다. ={}", member.getPassword());
-            throw new MemberPasswordDifferent(MEMBER_PASSWORD_DIFFERENT);
-        }
     }
 }
